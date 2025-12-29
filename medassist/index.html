@@ -10,14 +10,13 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
 
         :root {
-            /* Neutral Grey Palette */
-            --primary: #475569; /* Slate 600 */
-            --primary-light: #F1F5F9; /* Slate 100 */
-            --accent: #94A3B8; /* Slate 400 */
-            --bg-main: #E2E8F0; /* Slate 200 */
-            --text-main: #1E293B; /* Slate 800 */
-            --text-muted: #64748B; /* Slate 500 */
-            --panel-bg: #F8FAFC; /* Slate 50 */
+            --primary: #475569;
+            --primary-light: #F1F5F9;
+            --accent: #94A3B8;
+            --bg-main: #E2E8F0;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --panel-bg: #F8FAFC;
         }
 
         body {
@@ -96,7 +95,6 @@
 
         .hidden-scale { transform: scale(0) translateY(20px); opacity: 0; pointer-events: none; }
 
-        /* Full Calendar Grid */
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -113,13 +111,8 @@
             transition: all 0.2s;
         }
         .calendar-grid-day:hover { background: #F1F5F9; }
-        .calendar-grid-day.selected {
-            background: #475569;
-            color: white;
-        }
-        .calendar-grid-day.today-marker {
-            box-shadow: inset 0 0 0 2px #94A3B8;
-        }
+        .calendar-grid-day.selected { background: #475569; color: white; }
+        .calendar-grid-day.today-marker { box-shadow: inset 0 0 0 2px #94A3B8; }
         
         .typing-dot {
             width: 6px;
@@ -135,6 +128,10 @@
 
     <!-- LOGIN SCREEN -->
     <div id="loginSection" class="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-slate-200">
+        <button onclick="toggleSettingsModal(true)" class="absolute top-6 right-6 w-10 h-10 rounded-xl bg-slate-300/50 flex items-center justify-center text-slate-600 hover:bg-slate-300 transition-colors">
+            <i class="fas fa-cog"></i>
+        </button>
+
         <div class="bg-white rounded-[3rem] shadow-xl w-full max-w-md p-10 text-center">
             <div class="bg-slate-100 w-20 h-20 rounded-[2rem] flex items-center justify-center text-slate-500 mx-auto mb-8">
                 <i class="fas fa-hand-holding-medical text-3xl"></i>
@@ -163,7 +160,6 @@
                         <i class="fas fa-bars"></i>
                     </button>
                     <div class="flex items-center gap-2">
-                        <!-- Updated Logo Icon -->
                         <div class="w-9 h-9 bg-slate-800 text-white rounded-xl flex items-center justify-center">
                             <i class="fas fa-briefcase-medical text-sm"></i>
                         </div>
@@ -189,7 +185,6 @@
         <div id="side-menu-overlay" onclick="toggleSideMenu(false)" class="fixed inset-0 bg-slate-900/40 z-50 hidden backdrop-blur-sm"></div>
         <div id="side-menu" class="fixed top-0 left-0 h-full w-72 bg-slate-50 z-[60] shadow-2xl flex flex-col p-8 rounded-r-[2.5rem] border-r border-slate-200">
             <div class="mb-10 pt-6">
-                <!-- Sidebar Logo -->
                 <div class="w-16 h-16 bg-slate-800 rounded-3xl mb-4 flex items-center justify-center text-white text-2xl shadow-lg">
                     <i class="fas fa-briefcase-medical"></i>
                 </div>
@@ -203,6 +198,9 @@
                 <button onclick="switchTab('list')" class="w-full text-left p-4 rounded-2xl font-bold text-slate-500 hover:bg-white flex items-center gap-4 transition-all">
                     <i class="fas fa-list"></i> Library
                 </button>
+                <button onclick="toggleSettingsModal(true); toggleSideMenu(false);" class="w-full text-left p-4 rounded-2xl font-bold text-slate-500 hover:bg-white flex items-center gap-4 transition-all">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
             </nav>
             <button onclick="logout()" class="w-full p-4 text-slate-400 font-bold border-t border-slate-200 mt-4 flex items-center gap-4 hover:text-red-500 transition-colors">
                 <i class="fas fa-sign-out-alt"></i> Logout
@@ -211,7 +209,6 @@
 
         <main class="max-w-xl mx-auto p-6">
             <div id="view-today" class="space-y-6">
-                <!-- Date Strip Panel -->
                 <div class="bg-slate-50/50 rounded-[2.5rem] p-6 border border-slate-300 shadow-sm">
                     <div class="flex justify-between items-center mb-5 px-1">
                         <div class="flex flex-col">
@@ -227,13 +224,11 @@
                     <div id="calendar-strip" class="calendar-strip"></div>
                 </div>
 
-                <!-- Daily Status -->
                 <div id="status-card" class="bg-white rounded-[2.5rem] p-8 border border-slate-300 shadow-sm">
                     <h2 id="greeting-date" class="text-xl font-extrabold text-slate-800">Daily Goal</h2>
                     <p id="summary-text" class="text-slate-500 text-base mt-2 font-medium">No schedule for this day.</p>
                 </div>
 
-                <!-- Medications Container -->
                 <div id="schedule-container" class="space-y-4"></div>
             </div>
 
@@ -288,7 +283,7 @@
 
     <!-- Add Medication Modal -->
     <div id="modal-overlay" class="fixed inset-0 hidden z-[110] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-6">
-        <div class="bg-white w-full max-w-sm rounded-[3rem] p-8 shadow-2xl border border-slate-200">
+        <div class="bg-white w-full max-w-sm rounded-[3rem] p-8 shadow-2xl border border-slate-200 overflow-y-auto max-h-[90vh]">
             <h2 class="text-2xl font-extrabold text-slate-800 mb-6">Add Medication</h2>
             <form id="med-form" class="space-y-4">
                 <div class="space-y-1">
@@ -305,8 +300,45 @@
                         <input type="time" id="med-time" class="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none font-bold text-slate-800" required>
                     </div>
                 </div>
+                <div class="space-y-1">
+                    <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-2">Frequency</label>
+                    <select id="med-frequency" class="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none font-bold text-slate-800">
+                        <option value="daily">Daily</option>
+                        <option value="every-other">Every Other Day</option>
+                        <option value="weekly">Weekly</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-2">Start Date</label>
+                        <input type="date" id="med-start-date" class="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none font-bold text-slate-800" required>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-2">End Date (Optional)</label>
+                        <input type="date" id="med-end-date" class="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none font-bold text-slate-800">
+                    </div>
+                </div>
                 <div class="flex gap-3 pt-6">
                     <button type="button" onclick="toggleModal(false)" class="flex-1 py-4 bg-slate-100 rounded-2xl font-extrabold text-slate-500">Cancel</button>
+                    <button type="submit" class="flex-1 py-4 bg-slate-800 text-white rounded-2xl font-extrabold shadow-lg">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 hidden z-[250] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-6">
+        <div class="bg-white w-full max-w-sm rounded-[3rem] p-8 shadow-2xl border border-slate-200">
+            <h2 class="text-2xl font-extrabold text-slate-800 mb-2">Settings</h2>
+            <p class="text-slate-500 text-sm mb-6">Configure your connection for local use.</p>
+            <form onsubmit="saveSettings(event)" class="space-y-4">
+                <div class="space-y-1">
+                    <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-2">Gemini API Key</label>
+                    <input type="password" id="settings-api-key" placeholder="Paste your API key here" class="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none font-bold text-slate-800 focus:border-slate-400" required>
+                    <p class="text-[10px] text-slate-400 px-2 mt-1">Get a free key from <a href="https://aistudio.google.com/app/apikey" target="_blank" class="underline text-blue-500">Google AI Studio</a></p>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="toggleSettingsModal(false)" class="flex-1 py-4 bg-slate-100 rounded-2xl font-extrabold text-slate-500">Cancel</button>
                     <button type="submit" class="flex-1 py-4 bg-slate-800 text-white rounded-2xl font-extrabold shadow-lg">Save</button>
                 </div>
             </form>
@@ -320,7 +352,6 @@
                 <h2 id="modal-month-title" class="text-2xl font-extrabold text-slate-800 tracking-tight">Month</h2>
                 <button onclick="closeFullCalendar()" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400"><i class="fas fa-times"></i></button>
             </div>
-            
             <div class="grid grid-cols-7 gap-1 mb-4 text-center">
                 <div class="text-[10px] font-bold text-slate-300 uppercase">Su</div>
                 <div class="text-[10px] font-bold text-slate-300 uppercase">Mo</div>
@@ -330,9 +361,7 @@
                 <div class="text-[10px] font-bold text-slate-300 uppercase">Fr</div>
                 <div class="text-[10px] font-bold text-slate-300 uppercase">Sa</div>
             </div>
-            
             <div id="full-calendar-grid" class="calendar-grid"></div>
-            
             <button onclick="closeFullCalendar()" class="w-full mt-8 py-4 bg-slate-800 text-white rounded-2xl font-extrabold shadow-lg">Close</button>
         </div>
     </div>
@@ -351,13 +380,20 @@
     <input type="file" id="scan-input" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
 
     <script>
-        const apiKey = "";
+        const apiKey = ""; 
         let medications = [];
         let completedDoses = {};
         let selectedDate = new Date();
         selectedDate.setHours(0,0,0,0);
         let currentUser = null;
 
+        // --- HELPERS ---
+        function dateDiffInDays(a, b) {
+            const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+            return Math.floor((a - b) / _MS_PER_DAY);
+        }
+
+        // --- AUTH & SETUP ---
         function handleAuth(e) {
             e.preventDefault();
             const email = document.getElementById('email').value.trim();
@@ -385,6 +421,10 @@
             
             medications = JSON.parse(localStorage.getItem(`ms_meds_${email}`) || '[]');
             completedDoses = JSON.parse(localStorage.getItem(`ms_logs_${email}`) || '{}');
+            
+            // Default dates for form
+            document.getElementById('med-start-date').value = new Date().toISOString().split('T')[0];
+            
             renderAll();
         }
 
@@ -396,6 +436,24 @@
 
         function logout() { window.location.reload(); }
 
+        function toggleSettingsModal(show) {
+            const modal = document.getElementById('settings-modal');
+            modal.classList.toggle('hidden', !show);
+            if (show) document.getElementById('settings-api-key').value = localStorage.getItem('medassist_api_key') || "";
+        }
+
+        function saveSettings(e) {
+            e.preventDefault();
+            const key = document.getElementById('settings-api-key').value.trim();
+            localStorage.setItem('medassist_api_key', key);
+            toggleSettingsModal(false);
+        }
+
+        function getEffectiveApiKey() {
+            return (apiKey && apiKey.length > 0) ? apiKey : (localStorage.getItem('medassist_api_key') || "");
+        }
+
+        // --- APP LOGIC ---
         const renderAll = () => { renderStrip(); renderSchedule(); renderLibrary(); updateSummary(); };
 
         const renderStrip = () => {
@@ -418,22 +476,37 @@
 
         const renderSchedule = () => {
             const container = document.getElementById('schedule-container');
-            const meds = medications.sort((a,b) => a.time.localeCompare(b.time));
             const key = selectedDate.toDateString();
             const done = completedDoses[key] || [];
             
-            if(meds.length === 0) {
-                container.innerHTML = `<div class="text-center text-slate-400 font-extrabold py-20 italic text-sm tracking-widest opacity-60">No medications scheduled.</div>`;
+            // Filter meds based on selected date
+            const visibleMeds = medications.filter(m => {
+                const start = new Date(m.startDate); start.setHours(0,0,0,0);
+                const end = m.endDate ? new Date(m.endDate) : null;
+                if (end) end.setHours(0,0,0,0);
+
+                if (selectedDate < start) return false;
+                if (end && selectedDate > end) return false;
+
+                const diff = dateDiffInDays(selectedDate, start);
+                if (m.frequency === 'every-other' && diff % 2 !== 0) return false;
+                if (m.frequency === 'weekly' && diff % 7 !== 0) return false;
+
+                return true;
+            }).sort((a,b) => a.time.localeCompare(b.time));
+            
+            if(visibleMeds.length === 0) {
+                container.innerHTML = `<div class="text-center text-slate-400 font-extrabold py-20 italic text-sm tracking-widest opacity-60">No medications scheduled for today.</div>`;
                 return;
             }
-            container.innerHTML = meds.map(m => {
+            container.innerHTML = visibleMeds.map(m => {
                 const isDone = done.includes(m.id);
                 return `<div class="bg-white p-6 rounded-[2rem] flex items-center justify-between border border-slate-300 shadow-sm">
                     <div class="flex items-center gap-5">
                         <div class="bg-slate-100 text-slate-600 px-4 py-2 rounded-xl text-xs font-extrabold">${m.time}</div>
                         <div>
                             <div class="text-lg font-extrabold text-slate-800 ${isDone ? 'line-through opacity-20' : ''}">${m.name}</div>
-                            <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">${m.dose}</div>
+                            <div class="text-xs text-slate-400 font-bold uppercase tracking-wider">${m.dose} • ${m.frequency}</div>
                         </div>
                     </div>
                     <button onclick="toggleDose('${m.id}')" class="w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${isDone ? 'bg-slate-800 text-white shadow-lg' : 'bg-slate-50 text-slate-300 border border-slate-200'}">
@@ -455,7 +528,8 @@
                          <div class="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 border border-slate-200"><i class="fas fa-pills"></i></div>
                          <div>
                             <div class="text-lg font-extrabold text-slate-800">${m.name}</div>
-                            <div class="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest">${m.dose} • ${m.time}</div>
+                            <div class="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest">${m.dose} • ${m.frequency}</div>
+                            <div class="text-[9px] text-slate-300 font-bold uppercase">${m.startDate} ${m.endDate ? 'to ' + m.endDate : '(No end date)'}</div>
                          </div>
                     </div>
                     <button onclick="deleteMed('${m.id}')" class="text-slate-200 hover:text-red-400 p-3 transition-colors"><i class="fas fa-trash-alt"></i></button>
@@ -463,10 +537,10 @@
         };
 
         const updateSummary = () => {
-            const meds = medications.length;
+            const container = document.getElementById('schedule-container');
+            const totalOnDay = container.children.length;
             const done = (completedDoses[selectedDate.toDateString()] || []).length;
-            const textEl = document.getElementById('summary-text');
-            textEl.innerText = meds > 0 ? `${done} of ${meds} completed.` : "No schedule for this day.";
+            document.getElementById('summary-text').innerText = totalOnDay > 0 ? `${done} of ${totalOnDay} completed.` : "No schedule for this day.";
         };
 
         window.toggleDose = (id) => {
@@ -487,16 +561,12 @@
         window.openFullCalendar = () => {
             const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             document.getElementById('modal-month-title').innerText = `${months[selectedDate.getMonth()]} ${selectedDate.getFullYear()}`;
-            
             const grid = document.getElementById('full-calendar-grid');
             grid.innerHTML = '';
-            
             const firstDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1).getDay();
             const daysInMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0).getDate();
             const today = new Date(); today.setHours(0,0,0,0);
-
             for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
-
             for (let d = 1; d <= daysInMonth; d++) {
                 const dayEl = document.createElement('div');
                 const thisDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), d);
@@ -504,20 +574,13 @@
                 if (thisDate.getTime() === selectedDate.getTime()) dayEl.classList.add('selected');
                 if (thisDate.getTime() === today.getTime()) dayEl.classList.add('today-marker');
                 dayEl.innerText = d;
-                dayEl.onclick = () => {
-                    selectedDate = thisDate;
-                    closeFullCalendar();
-                    renderAll();
-                };
+                dayEl.onclick = () => { selectedDate = thisDate; closeFullCalendar(); renderAll(); };
                 grid.appendChild(dayEl);
             }
-            
             document.getElementById('calendar-modal').classList.remove('hidden');
         };
 
-        window.closeFullCalendar = () => {
-            document.getElementById('calendar-modal').classList.add('hidden');
-        };
+        window.closeFullCalendar = () => document.getElementById('calendar-modal').classList.add('hidden');
 
         function toggleFabMenu() {
             document.getElementById('fab-menu').classList.toggle('hidden-scale');
@@ -544,19 +607,22 @@
                 id: Math.random().toString(36).substr(2,9),
                 name: document.getElementById('med-name').value,
                 dose: document.getElementById('med-dose').value,
-                time: document.getElementById('med-time').value
+                time: document.getElementById('med-time').value,
+                frequency: document.getElementById('med-frequency').value,
+                startDate: document.getElementById('med-start-date').value,
+                endDate: document.getElementById('med-end-date').value || null
             });
             localStorage.setItem(`ms_meds_${currentUser.email}`, JSON.stringify(medications));
             renderAll(); toggleModal(false); e.target.reset();
+            document.getElementById('med-start-date').value = new Date().toISOString().split('T')[0];
         };
 
-        // --- RESTORED FUNCTIONS ---
-
-        async function fetchWithRetry(url, opts, retries = 5) {
+        // --- AI FUNCTIONS ---
+        async function fetchWithRetry(url, opts, retries = 3) {
             for (let i = 0; i < retries; i++) {
                 try {
                     const res = await fetch(url, opts);
-                    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     return await res.json();
                 } catch (e) {
                     if (i === retries - 1) throw e;
@@ -569,11 +635,7 @@
             const container = document.getElementById('chat-container');
             const div = document.createElement('div');
             div.className = `chat-msg msg-${sender} shadow-sm`;
-            if (text === 'typing') {
-                div.innerHTML = `<div class="flex gap-2 p-1"><div class="typing-dot"></div><div class="typing-dot" style="animation-delay:0.2s"></div><div class="typing-dot" style="animation-delay:0.4s"></div></div>`;
-            } else {
-                div.innerText = text;
-            }
+            div.innerHTML = text === 'typing' ? `<div class="flex gap-2 p-1"><div class="typing-dot"></div><div class="typing-dot" style="animation-delay:0.2s"></div><div class="typing-dot" style="animation-delay:0.4s"></div></div>` : text;
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
             return div;
@@ -581,16 +643,17 @@
 
         async function handleChatSubmit(e) {
             if (e) e.preventDefault();
+            const currentApiKey = getEffectiveApiKey();
+            if (!currentApiKey) { toggleAiSheet(false); toggleSettingsModal(true); return; }
             const input = document.getElementById('chat-input');
             const text = input.value.trim();
             if(!text) return;
             appendMsg(text, 'user');
             input.value = '';
-            
             const typing = appendMsg('typing', 'bot');
             try {
-                const sysPrompt = `You are a medical assistant. User: ${currentUser.name}. Context: ${JSON.stringify(medications)}. Provide clear, concise answers. Always add "Consult a healthcare professional for medical advice."`;
-                const response = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                const sysPrompt = `You are a medical assistant. User: ${currentUser.name}. Meds: ${JSON.stringify(medications)}. Be brief. Always add "Consult a healthcare professional for medical advice."`;
+                const response = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${currentApiKey}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -599,19 +662,21 @@
                     })
                 });
                 typing.remove();
-                appendMsg(response.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, I couldn't process that.", 'bot');
-            } catch (err) {
-                typing.remove();
-                appendMsg("Connection lost. Please try again.", 'bot');
-            }
+                appendMsg(response.candidates?.[0]?.content?.parts?.[0]?.text || "Error processing request.", 'bot');
+            } catch (err) { typing.remove(); appendMsg("Check API key in settings.", 'bot'); }
         }
 
-        function triggerScan() { document.getElementById('scan-input').click(); toggleFabMenu(); }
+        function triggerScan() { 
+            if (!getEffectiveApiKey()) { toggleSettingsModal(true); return; }
+            document.getElementById('scan-input').click(); 
+            toggleFabMenu(); 
+        }
         
         async function handleFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
-            
+            e.target.value = '';
+            const currentApiKey = getEffectiveApiKey();
             const loader = document.getElementById('scan-loader');
             loader.classList.remove('hidden');
             const spinner = document.getElementById('loader-spinner');
@@ -619,24 +684,21 @@
             const title = document.getElementById('loader-title');
             const text = document.getElementById('loader-text');
             const closeBtn = document.getElementById('loader-close');
-
-            // Reset loader state
-            spinner.classList.remove('hidden');
-            success.classList.add('hidden');
-            closeBtn.classList.add('hidden');
-            title.innerText = "Processing...";
-            text.innerText = "Extracting medication details.";
+            spinner.classList.remove('hidden'); success.classList.add('hidden'); closeBtn.classList.add('hidden');
+            title.innerText = "Processing..."; text.innerText = "Extracting medication details.";
 
             const reader = new FileReader();
             reader.onload = async (event) => {
                 const base64 = event.target.result.split(',')[1];
+                let mimeType = file.type || "image/png";
+                if (mimeType === 'image/jpg') mimeType = 'image/jpeg';
                 try {
-                    const prompt = "Extract medication details from prescription. Return ONLY a JSON array of objects with keys: name, dose, time. Time in HH:mm.";
-                    const response = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    const prompt = "Extract medication details from this image. Return ONLY a JSON array of objects with keys: name, dose, time. Time in HH:mm format.";
+                    const response = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${currentApiKey}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            contents: [{ role: "user", parts: [{ text: prompt }, { inlineData: { mimeType: file.type || "image/png", data: base64 } }] }],
+                            contents: [{ role: "user", parts: [{ text: prompt }, { inlineData: { mimeType: mimeType, data: base64 } }] }],
                             generationConfig: { responseMimeType: "application/json" }
                         })
                     });
@@ -644,24 +706,16 @@
                     meds.forEach(m => {
                         medications.push({
                             id: Math.random().toString(36).substr(2,9),
-                            name: m.name, dose: m.dose, time: m.time || "09:00",
-                            frequency: "daily", startDate: new Date().toISOString().split('T')[0]
+                            name: m.name || "Unknown", dose: m.dose || "Dose", time: m.time || "09:00",
+                            frequency: "daily", startDate: new Date().toISOString().split('T')[0], endDate: null
                         });
                     });
                     localStorage.setItem(`ms_meds_${currentUser.email}`, JSON.stringify(medications));
                     renderAll();
-                    
-                    // Success State
-                    spinner.classList.add('hidden');
-                    success.classList.remove('hidden');
-                    closeBtn.classList.remove('hidden');
-                    title.innerText = "Success!";
-                    text.innerText = `Added ${meds.length} medications.`;
+                    spinner.classList.add('hidden'); success.classList.remove('hidden'); closeBtn.classList.remove('hidden');
+                    title.innerText = "Success!"; text.innerText = `Added ${meds.length} medications.`;
                 } catch (err) {
-                    spinner.classList.add('hidden');
-                    title.innerText = "Error";
-                    text.innerText = "Could not read image. Please try again.";
-                    closeBtn.classList.remove('hidden');
+                    spinner.classList.add('hidden'); title.innerText = "Error"; text.innerText = "Extraction failed."; closeBtn.classList.remove('hidden');
                 }
             };
             reader.readAsDataURL(file);
